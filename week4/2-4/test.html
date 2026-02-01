@@ -262,17 +262,18 @@ const QUESTIONS = [
     reviewLabel:"John 15:16 (blanks)"
   },
 
-  // Blanks – Romans 10:17 (2 blanks, each with 4 options)
-  {
-    mode:"blanks",
-    ref:"Romans 10:17",
-    text:'So faith comes from ___, and ___ through the word of Christ.',
-    blanks:[
-      { answer:"hearing", options:["hearing","learning","reading","speaking"] },
-      { answer:"hearing", options:["hearing","believing","knowing","seeing"] }
-    ],
-    reviewLabel:"Romans 10:17 (blanks)"
-  },
+// Blanks – Romans 10:17 (3 blanks, no duplicate hearing)
+{
+  mode:"blanks",
+  ref:"Romans 10:17",
+  text:'So ___ comes from ___, and hearing through the word of ___.',
+  blanks:[
+    { answer:"faith",   options:["faith","hope","grace","love"] },
+    { answer:"hearing", options:["hearing","reading","seeing","learning"] },
+    { answer:"christ",  options:["christ","god","moses","paul"] }
+  ],
+  reviewLabel:"Romans 10:17 (blanks)"
+},
 
   // Spelling tiles – at least 3, significant words
   {
@@ -303,6 +304,13 @@ const QUESTIONS = [
     answer:"faith",
     reviewLabel:"Spelling: faith"
   },
+  {
+  mode:"tiles",
+  ref:"Romans 10:17",
+  context:'So faith comes from ___, and hearing through the word of Christ.',
+  answer:"hearing",
+  reviewLabel:"Spelling: hearing"
+},
   {
     mode:"tiles",
     ref:"Romans 10:17",
@@ -523,20 +531,30 @@ function showSummary(){
 
   const misses = Array.from(missed);
 
-  card.innerHTML = `
-    <div class="ref">Practice Test</div>
-    <div class="prompt" style="font-weight:900; font-size:28px; margin-top:6px;">
-      Score: ${pct}%
-    </div>
-    <div class="prompt" style="margin-top:8px;">
-      You got ${correct} out of ${total} correct.
-    </div>
-    <div class="prompt" style="margin-top:14px; font-weight:900;">
-      ${misses.length ? "Review these:" : "Nothing to review. Nice work."}
-    </div>
-    ${misses.length ? `<ul style="margin:8px 0 0 22px; font-weight:800;">${misses.map(m => `<li>${m}</li>`).join("")}</ul>` : ""}
-  `;
-}
+card.innerHTML = `
+  <div class="ref">Practice Test</div>
+  <div class="prompt" style="font-weight:900; font-size:28px; margin-top:6px;">
+    Score: ${pct}%
+  </div>
+  <div class="prompt" style="margin-top:8px;">
+    You got ${correct} out of ${total} correct.
+  </div>
+  <div class="prompt" style="margin-top:14px; font-weight:900;">
+    ${misses.length ? "Review these:" : "Nothing to review. Nice work."}
+  </div>
+  ${misses.length ? `<ul style="margin:8px 0 0 22px; font-weight:800;">${misses.map(m => `<li>${m}</li>`).join("")}</ul>` : ""}
+
+  <div class="btnRow" style="margin-top:18px;">
+    <button class="btn" id="tryAgainBtn">Try Again</button>
+  </div>
+`;
+
+document.getElementById("tryAgainBtn").onclick = () => {
+  idx = 0;
+  results.length = 0;
+  missed.clear();
+  render();
+};
 
 function buildDecoys(targetArr, count){
   const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
