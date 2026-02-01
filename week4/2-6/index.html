@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Week 4 (2-6)</title>
+
+  <!-- Titan One -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Titan+One&display=swap" rel="stylesheet">
+
+  <!-- Kitimus preload -->
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-neutral.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-blink.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint-left.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint-right.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-celebrate.png">
+
+  <style>
+    :root{
+      --bg:#f4f6fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --shadow:0 10px 30px rgba(15,23,42,.12);
+      --radius:18px;
+      --btn:#0f172a;
+      --btnText:#ffffff;
+      --pillBg:#eef2ff;
+      --pillText:#28327a;
+      --link:#1d4ed8;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      background:#fff;
+      padding:10px 14px;
+      box-shadow:0 1px 10px rgba(0,0,0,.06);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    header a{
+      color:var(--link);
+      text-decoration:none;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    header h1{
+      margin:0;
+      font-size:18px;
+      font-weight:1000;
+      text-align:center;
+      flex:1;
+      letter-spacing:.2px;
+    }
+    header .spacer{ width:52px; }
+
+    main{
+      padding:16px 12px 24px;
+      display:flex;
+      justify-content:center;
+    }
+    .wrap{
+      width:100%;
+      max-width:900px;
+    }
+
+    .topline{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin:10px 2px 14px;
+    }
+    .titleblock h2{
+      margin:0;
+      font-size:34px;
+      font-weight:1000;
+    }
+    .titleblock p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-weight:800;
+      font-size:18px;
+    }
+
+    .kitimus{
+      width:74px;
+      height:74px;
+      user-select:none;
+      pointer-events:none;
+      filter:drop-shadow(0 8px 18px rgba(0,0,0,.14));
+    }
+    .kitimus img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin:14px 0;
+    }
+    .pill{
+      display:inline-block;
+      background:var(--pillBg);
+      color:var(--pillText);
+      font-weight:1000;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:13px;
+      margin-bottom:10px;
+    }
+
+    .verseRef{
+      font-size:34px;
+      font-weight:1000;
+      margin:0 0 4px;
+    }
+    .verseText{
+      font-size:22px;
+      font-weight:900;
+      margin:0 0 14px;
+      line-height:1.35;
+    }
+
+    .tip{
+      color:var(--muted);
+      font-weight:900;
+      font-size:18px;
+      margin:0;
+    }
+
+    .btn{
+      width:100%;
+      padding:18px;
+      border-radius:18px;
+      border:0;
+      background:var(--btn);
+      color:var(--btnText);
+      font-weight:1000;
+      font-size:20px;
+      cursor:pointer;
+    }
+    .btn:active{ transform:translateY(1px); }
+
+    .sub{
+      color:var(--muted);
+      font-weight:900;
+      margin:10px 0 0;
+      font-size:16px;
+    }
+
+    @media (max-width:560px){
+      .titleblock h2{ font-size:30px; }
+      .verseRef{ font-size:28px; }
+      .verseText{ font-size:20px; }
+      .kitimus{ width:64px; height:64px; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <a href="../index.html">← Back</a>
+  <h1>Week 4 (2-6)</h1>
+  <div class="spacer"></div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="topline">
+      <div class="titleblock">
+        <h2>Memories</h2>
+        <p>Read the verses, then take the practice test.</p>
+      </div>
+
+      <div class="kitimus">
+        <img src="/mascots/kitimus/kitimus-squint.png" alt="">
+      </div>
+    </div>
+
+    <section class="card" id="versesCard">
+      <div class="pill">Verses</div>
+
+      <!-- Verses will render here -->
+      <div id="versesList"></div>
+
+      <p class="tip">Tip: Read it out loud a few times, then try the test. Focus on the important words.</p>
+    </section>
+
+    <section class="card">
+      <div class="pill">Practice Test</div>
+      <div class="sub">Fill in the blanks using dropdown choices, then spelling tiles with decoy letters.</div>
+      <button class="btn" onclick="location.href='./test.html'">Start Practice Test</button>
+    </section>
+
+  </div>
+</main>
+
+<script>
+  // EDIT THESE for Week 4 (2-6)
+  // Keep formatting exactly like this and the page will render clean.
+  const VERSES = [
+    {
+      ref: "Verse 1",
+      text: "Paste the Week 4 (2-6) verse text here."
+    },
+    {
+      ref: "Verse 2",
+      text: "Paste the Week 4 (2-6) verse text here."
+    }
+    // Add 1 to 2 more if needed:
+    // { ref:"Verse 3", text:"..." }
+  ];
+
+  const list = document.getElementById("versesList");
+
+  VERSES.forEach(v => {
+    const ref = document.createElement("div");
+    ref.className = "verseRef";
+    ref.textContent = v.ref;
+
+    const txt = document.createElement("div");
+    txt.className = "verseText";
+    txt.textContent = v.text;
+
+    list.appendChild(ref);
+    list.ap
