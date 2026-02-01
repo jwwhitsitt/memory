@@ -262,13 +262,37 @@ function buildDecoys(targetArr, count){
   return shuffle(pool).slice(0, count);
 }
 
-// Display formatting without changing answer checking
 function displayWord(w){
   if(!w) return w;
-  const lower = String(w).toLowerCase();
-  if(lower === "christ") return "Christ";
-  return w;
+
+  const raw = String(w);
+  const lower = raw.toLowerCase();
+
+  // Explicit faith-proper nouns and common Bible names (add as needed)
+  const proper = {
+    christ: "Christ",
+    god: "God",
+    jesus: "Jesus",
+    moses: "Moses",
+    paul: "Paul",
+    peter: "Peter",
+    john: "John",
+    romans: "Romans",
+    jerusalem: "Jerusalem",
+    israel: "Israel"
+  };
+
+  if(proper[lower]) return proper[lower];
+
+  // If it's a single lowercase word, Title Case it (nice default for names/places)
+  // Leaves normal words like "faith" / "hearing" alone if they are lowercase decoys
+  if(/^[a-z]+$/.test(raw)){
+    return raw.charAt(0).toUpperCase() + raw.slice(1);
+  }
+
+  return raw;
 }
+
 
 /* ============================
    DATA
