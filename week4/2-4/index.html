@@ -6,11 +6,12 @@
   <title>Week 4 (2-4) – Memories</title>
 
   <!-- Kitimus preload (prevents flicker) -->
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-neutral.png">
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-squint.png">
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-blink.png">
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-squint-left.png">
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-squint-right.png">
+<link rel="preload" as="image" href="/mascots/kitimus/kitimus-neutral.png">
+<link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint.png">
+<link rel="preload" as="image" href="/mascots/kitimus/kitimus-blink.png">
+<link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint-left.png">
+<link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint-right.png">
+
 
   <style>
     :root{
@@ -194,7 +195,7 @@
         </div>
 
         <div class="kitimus" aria-hidden="true">
-          <img id="kitimusImg" src="/memory/mascots/kitimus/kitimus-neutral.png" alt="">
+         <img id="kitimusImg" src="/mascots/kitimus/kitimus-neutral.png" alt="">
         </div>
       </div>
 
@@ -228,13 +229,14 @@
   <script>
     // simple Kitimus idle (same vibe as tests, lighter)
     const kitimusImg = document.getElementById("kitimusImg");
-    const KITIMUS = {
-      neutral: "/memory/mascots/kitimus/kitimus-neutral.png",
-      squint: "/memory/mascots/kitimus/kitimus-squint.png",
-      squintLeft: "/memory/mascots/kitimus/kitimus-squint-left.png",
-      squintRight: "/memory/mascots/kitimus/kitimus-squint-right.png",
-      blink: "/memory/mascots/kitimus/kitimus-blink.png"
-    };
+   const KITIMUS = {
+  neutral: "/mascots/kitimus/kitimus-neutral.png",
+  squint: "/mascots/kitimus/kitimus-squint.png",
+  squintLeft: "/mascots/kitimus/kitimus-squint-left.png",
+  squintRight: "/mascots/kitimus/kitimus-squint-right.png",
+  blink: "/mascots/kitimus/kitimus-blink.png"
+};
+
 
     function setKitimus(state){
       if(!kitimusImg) return;
