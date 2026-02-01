@@ -199,6 +199,19 @@
       font-size:16px;
       cursor:pointer;
     }
+    /* Center the Backspace / Clear / Check row for tiles mode */
+.btnRow{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+.btnRow .btn{
+  min-width:160px;
+}
+
     .btn.good{ background:var(--good); }
     .btn.bad{ background:var(--bad); }
   </style>
@@ -235,40 +248,68 @@
    DATA (LOCKED, CLEAN)
 ============================ */
 
-const JOHN_OPTIONS = ["choose","chose","appointed","anointed"]; // decoy included
-
 const QUESTIONS = [
-  // Blanks – John 15:16 (3 blanks, 3 dropdowns)
+  // Blanks – John 15:16 (3 blanks, each with 4 options)
   {
     mode:"blanks",
     ref:"John 15:16",
-    text:"You did not ___ me, but I ___ you and ___ you.",
+    text:'You did not ___ me, but I ___ you and ___ you.',
     blanks:[
-      { answer:"choose", options: JOHN_OPTIONS },
-      { answer:"chose", options: JOHN_OPTIONS },
-      { answer:"appointed", options: JOHN_OPTIONS }
-    ]
+      { answer:"choose", options:["choose","pick","select","approve"] },
+      { answer:"chose", options:["chose","picked","named","called"] },
+      { answer:"appointed", options:["appointed","assigned","anointed","approved"] }
+    ],
+    reviewLabel:"John 15:16 (blanks)"
   },
 
-  // Blanks – Romans 10:17 (2 blanks, 2 dropdowns)
+  // Blanks – Romans 10:17 (2 blanks, each with 4 options)
   {
     mode:"blanks",
     ref:"Romans 10:17",
-    text:"So faith comes from ___, and ___ through the word of Christ.",
+    text:'So faith comes from ___, and ___ through the word of Christ.',
     blanks:[
-      { answer:"hearing", options:["hearing","reading","learning","speaking"] },
-      { answer:"hearing", options:["hearing","reading","learning","speaking"] }
-    ]
+      { answer:"hearing", options:["hearing","learning","reading","speaking"] },
+      { answer:"hearing", options:["hearing","believing","knowing","seeing"] }
+    ],
+    reviewLabel:"Romans 10:17 (blanks)"
   },
 
-  // Spelling tiles – significant words only (6 total)
-  { mode:"tiles", ref:"John 15:16",   context:"You did not ___ me, but I chose you.",                      answer:"choose" },
-  { mode:"tiles", ref:"John 15:16",   context:"You did not choose me, but I ___ you.",                    answer:"chose" },
-  { mode:"tiles", ref:"John 15:16",   context:"You did not choose me, but I chose you and ___ you.",      answer:"appointed" },
-
-  { mode:"tiles", ref:"Romans 10:17", context:"So ___ comes from hearing, and hearing through the word of Christ.", answer:"faith" },
-  { mode:"tiles", ref:"Romans 10:17", context:"So faith comes from ___, and hearing through the word of Christ.", answer:"hearing" },
-  { mode:"tiles", ref:"Romans 10:17", context:"So faith comes from hearing, and hearing through the word of ___.", answer:"Christ" }
+  // Spelling tiles – at least 3, significant words
+  {
+    mode:"tiles",
+    ref:"John 15:16",
+    context:'You did not ___ me, but I chose you.',
+    answer:"choose",
+    reviewLabel:"Spelling: choose"
+  },
+  {
+    mode:"tiles",
+    ref:"John 15:16",
+    context:'You did not choose me, but I ___ you.',
+    answer:"chose",
+    reviewLabel:"Spelling: chose"
+  },
+  {
+    mode:"tiles",
+    ref:"John 15:16",
+    context:'You did not choose me, but I chose you and ___ you.',
+    answer:"appointed",
+    reviewLabel:"Spelling: appointed"
+  },
+  {
+    mode:"tiles",
+    ref:"Romans 10:17",
+    context:'So ___ comes from hearing, and hearing through the word of Christ.',
+    answer:"faith",
+    reviewLabel:"Spelling: faith"
+  },
+  {
+    mode:"tiles",
+    ref:"Romans 10:17",
+    context:'So faith comes from hearing, and hearing through the word of ___.',
+    answer:"christ",
+    reviewLabel:"Spelling: Christ"
+  }
 ];
 
 /* ============================
@@ -276,51 +317,19 @@ const QUESTIONS = [
 ============================ */
 
 let idx = 0;
+
 const card = document.getElementById("card");
 const bar = document.getElementById("bar");
 const barText = document.getElementById("barText");
 const pill = document.getElementById("modePill");
 
+const results = [];
+const missed = new Set();
+
 function updateProgress(){
-  bar.style.width = `${Math.round(((idx+1)/QUESTIONS.length)*100)}%`;
+  const pct = Math.round(((idx+1)/QUESTIONS.length)*100);
+  bar.style.width = pct + "%";
   barText.textContent = `${idx+1} of ${QUESTIONS.length}`;
-}
-
-function shuffle(a){
-  const x = a.slice();
-  for(let i=x.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [x[i],x[j]]=[x[j],x[i]];
-  }
-  return x;
-}
-
-function normalizeWord(w){
-  return (w || "").toString().trim();
-}
-
-function buildLetterTiles(answer){
-  // answer can include mixed case. tiles are uppercase.
-  const target = normalizeWord(answer);
-  const targetLetters = target.toUpperCase().split("");
-
-  // Decoy letters: add 2 letters not already overrepresented
-  const ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-  const existing = new Set(targetLetters);
-  const decoys = [];
-
-  while(decoys.length < 2){
-    const pick = ALPHA[Math.floor(Math.random()*ALPHA.length)];
-    // allow repeats only if needed, but try to avoid duplicates
-    if(decoys.includes(pick)) continue;
-    // prefer letters not in the word, but allow if the word is short
-    if(existing.has(pick) && targetLetters.length > 5) continue;
-    decoys.push(pick);
-  }
-
-  // Shuffle tiles
-  const tiles = shuffle(targetLetters.concat(decoys));
-  return { target, targetLetters, tiles };
 }
 
 function render(){
@@ -328,164 +337,221 @@ function render(){
   card.innerHTML = "";
 
   const q = QUESTIONS[idx];
-  pill.textContent = q.mode === "blanks" ? "Blanks" : "Spelling";
+  pill.textContent = (q.mode === "blanks") ? "Blanks" : "Spelling";
 
   if(q.mode === "blanks"){
-    card.innerHTML = `<div class="ref">${q.ref}</div>`;
-
-    const p = document.createElement("div");
-    p.className = "prompt";
-
-    // IMPORTANT: replace ALL blanks, not just the first one
-    let blankIndex = 0;
-    p.innerHTML = q.text.replace(/___/g, () => {
-      const b = q.blanks[blankIndex++];
-      if(!b){
-        // Safety: if text has more blanks than data, show a literal blank.
-        return "___";
-      }
-      const opts = (b.options || []).slice(0,4);
-      const html = `
-        <select data-answer="${b.answer}">
-          <option value="">---</option>
-          ${opts.map(o => `<option value="${o}">${o}</option>`).join("")}
-        </select>
-      `;
-      return html;
-    });
-
-    card.appendChild(p);
-
-    const btn = document.createElement("button");
-    btn.className = "btn";
-    btn.textContent = "Check";
-
-    btn.onclick = () => {
-      const selects = card.querySelectorAll("select");
-      let ok = true;
-
-      selects.forEach(s => {
-        if(s.value !== s.dataset.answer) ok = false;
-      });
-
-      btn.classList.remove("good","bad");
-      btn.classList.add(ok ? "good" : "bad");
-      setTimeout(next, 600);
-    };
-
-    card.appendChild(btn);
+    renderBlanks(q);
     return;
   }
 
   if(q.mode === "tiles"){
-    card.innerHTML = `<div class="ref">${q.ref}</div>
-      <div class="prompt">${q.context}</div>`;
-
-    const { target, targetLetters, tiles } = buildLetterTiles(q.answer);
-
-    // Slots
-    const slots = document.createElement("div");
-    slots.className = "slots";
-
-    const slotEls = targetLetters.map(() => {
-      const s = document.createElement("div");
-      s.className = "slot";
-      slots.appendChild(s);
-      return s;
-    });
-
-    card.appendChild(slots);
-
-    // Tiles grid
-    const grid = document.createElement("div");
-    grid.className = "tiles";
-
-    // Track clicks for backspace
-    const stack = []; // { tileEl, slotIndex }
-
-    tiles.forEach(l => {
-      const t = document.createElement("div");
-      t.className = "tile";
-      t.textContent = l;
-
-      t.onclick = () => {
-        if(t.classList.contains("used")) return;
-
-        const slotIndex = slotEls.findIndex(el => el.textContent === "");
-        if(slotIndex === -1) return;
-
-        slotEls[slotIndex].textContent = l;
-        t.classList.add("used");
-        stack.push({ tileEl: t, slotIndex });
-      };
-
-      grid.appendChild(t);
-    });
-
-    card.appendChild(grid);
-
-    // Bottom controls
-    const controls = document.createElement("div");
-    controls.className = "bottom";
-
-    const backBtn = document.createElement("button");
-    backBtn.className = "btn secondary";
-    backBtn.textContent = "Backspace";
-    backBtn.onclick = () => {
-      const last = stack.pop();
-      if(!last) return;
-
-      slotEls[last.slotIndex].textContent = "";
-      last.tileEl.classList.remove("used");
-    };
-
-    const clearBtn = document.createElement("button");
-    clearBtn.className = "btn secondary";
-    clearBtn.textContent = "Clear";
-    clearBtn.onclick = () => {
-      // Clear slots
-      slotEls.forEach(el => el.textContent = "");
-      // Unuse tiles
-      grid.querySelectorAll(".tile.used").forEach(el => el.classList.remove("used"));
-      // Clear stack
-      stack.length = 0;
-    };
-
-    const checkBtn = document.createElement("button");
-    checkBtn.className = "btn";
-    checkBtn.textContent = "Check";
-    checkBtn.onclick = () => {
-      const attempt = slotEls.map(el => el.textContent).join("");
-      const ok = attempt === target.toUpperCase();
-
-      checkBtn.classList.remove("good","bad");
-      checkBtn.classList.add(ok ? "good" : "bad");
-
-      setTimeout(next, 600);
-    };
-
-    controls.appendChild(backBtn);
-    controls.appendChild(clearBtn);
-    controls.appendChild(checkBtn);
-
-    card.appendChild(controls);
+    renderTiles(q);
     return;
   }
+}
 
-  // Safety if a question has an invalid mode
-  card.innerHTML = `<div class="ref">Data error</div>
-    <div class="prompt">Invalid question mode at ${idx+1}. Fix the QUESTIONS array.</div>`;
+function renderBlanks(q){
+  const wrap = document.createElement("div");
+  wrap.innerHTML = `<div class="ref">${q.ref}</div>`;
+
+  const p = document.createElement("div");
+  p.className = "prompt";
+
+  // Replace each ___ with a dropdown
+  let blankIndex = 0;
+  p.innerHTML = q.text.replaceAll("___", () => {
+    const b = q.blanks[blankIndex++];
+    return `<select class="blankSel" data-answer="${b.answer}">
+      <option value="">---</option>
+      ${b.options.map(o => `<option value="${o}">${o}</option>`).join("")}
+    </select>`;
+  });
+
+  wrap.appendChild(p);
+
+  const btn = document.createElement("button");
+  btn.className = "btn";
+  btn.textContent = "Check";
+
+  btn.onclick = () => {
+    const selects = Array.from(wrap.querySelectorAll("select.blankSel"));
+    const ok = selects.every(s => s.value === s.dataset.answer);
+
+    btn.classList.remove("good","bad");
+    btn.classList.add(ok ? "good" : "bad");
+
+    results.push({ label:q.reviewLabel || q.ref, ok });
+    if(!ok) missed.add(q.reviewLabel || q.ref);
+
+    setTimeout(next, 450);
+  };
+
+  card.appendChild(wrap);
+  card.appendChild(btn);
+}
+
+function renderTiles(q){
+  card.innerHTML = `
+    <div class="ref">${q.ref}</div>
+    <div class="prompt">${q.context}</div>
+  `;
+
+  // Slots
+  const slots = document.createElement("div");
+  slots.className = "slots";
+
+  const target = q.answer.toUpperCase().replace(/[^A-Z]/g,"");
+  const targetArr = target.split("");
+
+  targetArr.forEach(() => {
+    const s = document.createElement("div");
+    s.className = "slot";
+    slots.appendChild(s);
+  });
+
+  card.appendChild(slots);
+
+  // Build tiles: letters + decoys
+  const decoys = buildDecoys(targetArr, 2);
+  const letters = shuffle(targetArr.concat(decoys));
+
+  const grid = document.createElement("div");
+  grid.className = "tiles";
+
+  const tileEls = [];
+
+  letters.forEach((ch) => {
+    const t = document.createElement("button");
+    t.type = "button";
+    t.className = "tile";
+    t.textContent = ch;
+
+    t.onclick = () => {
+      const empty = Array.from(slots.children).find(x => !x.textContent);
+      if(!empty) return;
+      empty.textContent = ch;
+      t.classList.add("used");
+      t.disabled = true;
+    };
+
+    tileEls.push(t);
+    grid.appendChild(t);
+  });
+
+  card.appendChild(grid);
+
+  // Buttons row (centered)
+  const row = document.createElement("div");
+  row.className = "btnRow";
+
+  const backBtn = document.createElement("button");
+  backBtn.className = "btn secondary";
+  backBtn.textContent = "Backspace";
+
+  const clearBtn = document.createElement("button");
+  clearBtn.className = "btn secondary";
+  clearBtn.textContent = "Clear";
+
+  const checkBtn = document.createElement("button");
+  checkBtn.className = "btn";
+  checkBtn.textContent = "Check";
+
+  backBtn.onclick = () => {
+    // remove last filled slot
+    const filled = Array.from(slots.children).filter(x => x.textContent);
+    if(!filled.length) return;
+
+    const lastSlot = filled[filled.length - 1];
+    const removedChar = lastSlot.textContent;
+    lastSlot.textContent = "";
+
+    // re-enable one matching used tile (last used match is fine)
+    const usedTiles = tileEls.filter(t => t.disabled && t.textContent === removedChar);
+    if(usedTiles.length){
+      const t = usedTiles[usedTiles.length - 1];
+      t.disabled = false;
+      t.classList.remove("used");
+    }
+  };
+
+  clearBtn.onclick = () => {
+    // clear all slots and re-enable all tiles
+    Array.from(slots.children).forEach(s => s.textContent = "");
+    tileEls.forEach(t => {
+      t.disabled = false;
+      t.classList.remove("used");
+    });
+    checkBtn.classList.remove("good","bad");
+  };
+
+  checkBtn.onclick = () => {
+    const attempt = Array.from(slots.children).map(s => (s.textContent || "")).join("");
+    const ok = (attempt === target);
+
+    checkBtn.classList.remove("good","bad");
+    checkBtn.classList.add(ok ? "good" : "bad");
+
+    results.push({ label:q.reviewLabel || q.ref, ok });
+    if(!ok) missed.add(q.reviewLabel || q.ref);
+
+    setTimeout(next, 450);
+  };
+
+  row.appendChild(backBtn);
+  row.appendChild(clearBtn);
+  row.appendChild(checkBtn);
+  card.appendChild(row);
 }
 
 function next(){
   if(idx < QUESTIONS.length - 1){
     idx++;
     render();
-  } else {
-    card.innerHTML = "<h2>Nice work.</h2>";
-    bar.style.width = "100%";
-    barText.textContent = `${QUESTIONS.length} of ${QUESTIONS.length}`;
+    return;
   }
+  showSummary();
+}
+
+function showSummary(){
+  const total = results.length;
+  const correct = results.filter(r => r.ok).length;
+  const pct = total ? Math.round((correct / total) * 100) : 0;
+
+  bar.style.width = "100%";
+  barText.textContent = `${total} of ${total}`;
+  pill.textContent = "Score";
+
+  const misses = Array.from(missed);
+
+  card.innerHTML = `
+    <div class="ref">Practice Test</div>
+    <div class="prompt" style="font-weight:900; font-size:28px; margin-top:6px;">
+      Score: ${pct}%
+    </div>
+    <div class="prompt" style="margin-top:8px;">
+      You got ${correct} out of ${total} correct.
+    </div>
+    <div class="prompt" style="margin-top:14px; font-weight:900;">
+      ${misses.length ? "Review these:" : "Nothing to review. Nice work."}
+    </div>
+    ${misses.length ? `<ul style="margin:8px 0 0 22px; font-weight:800;">${misses.map(m => `<li>${m}</li>`).join("")}</ul>` : ""}
+  `;
+}
+
+function buildDecoys(targetArr, count){
+  const alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  const set = new Set(targetArr);
+  const pool = alpha.filter(ch => !set.has(ch));
+  return shuffle(pool).slice(0, count);
+}
+
+function shuffle(a){
+  const x = a.slice();
+  for(let i = x.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [x[i], x[j]] = [x[j], x[i]];
+  }
+  return x;
 }
 
 render();
