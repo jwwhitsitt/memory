@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Week 4 – Feb 4</title>
+  <title>Week 4 (2-4) – Practice Test</title>
 
   <!-- Kitimus preload -->
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-neutral.png">
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-squint.png">
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-celebrate.png">
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-blink.png">
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-squint-left.png">
-  <link rel="preload" as="image" href="/memory/mascots/kitimus/kitimus-squint-right.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-neutral.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-blink.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint-left.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint-right.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-celebrate.png">
 
   <style>
     :root{
@@ -22,50 +22,34 @@
       --shadow:0 10px 30px rgba(15,23,42,.12);
       --radius:18px;
       --link:#1d4ed8;
-
-      --btn:#0f172a;
-      --btn2:#e5e7eb;
-      --btn2text:#111827;
-
-      --bar:#c7d2fe;
-      --barbg:#e5e7eb;
-
       --good:#22c55e;
       --bad:#ef4444;
-
-      --h1: clamp(22px, 5.0vw, 38px);
-      --h2: clamp(14px, 3.8vw, 18px);
-      --choice: clamp(16px, 4.2vw, 20px);
-      --pill: clamp(12px, 3.2vw, 14px);
-
-      --pad: 12px;
-      --gap: 10px;
+      --btn:#0f172a;
+      --btnText:#ffffff;
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background:var(--bg);
       color:var(--text);
-      overflow:auto;
     }
 
     header{
       position:sticky;
       top:0;
       z-index:10;
-      padding:10px 14px;
       background:#fff;
+      padding:10px 14px;
       box-shadow:0 1px 10px rgba(0,0,0,.06);
       display:flex;
       align-items:center;
       gap:10px;
     }
     header a{
-      text-decoration:none;
       color:var(--link);
+      text-decoration:none;
       font-weight:900;
       white-space:nowrap;
     }
@@ -85,42 +69,37 @@
     }
     .wrap{
       width:100%;
-      max-width:720px;
+      max-width:760px;
     }
 
     .toprow{
-      position:relative;
       display:grid;
-      grid-template-columns: auto 1fr auto;
-      align-items:center;
+      grid-template-columns:auto 1fr auto;
       gap:10px;
+      align-items:center;
       margin-bottom:10px;
     }
     .pill{
-      background:#dbeafe;
-      color:#1e3a8a;
+      background:#eef2ff;
+      color:#28327a;
       font-weight:1000;
       border-radius:999px;
-      padding:8px 12px;
-      font-size:var(--pill);
-      min-width:92px;
+      padding:6px 10px;
+      font-size:13px;
+      min-width:88px;
       text-align:center;
-      white-space:nowrap;
     }
-    .barwrap{
-      flex:1;
-      height:18px;
-      background:var(--barbg);
+    .progress{
+      height:14px;
+      background:#e5e7eb;
       border-radius:999px;
-      position:relative;
       overflow:hidden;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+      position:relative;
     }
     .bar{
       height:100%;
       width:0%;
-      background:var(--bar);
-      border-radius:999px;
+      background:#c7d2fe;
       transition:width .25s ease;
     }
     .bartext{
@@ -129,790 +108,291 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      font-weight:1000;
+      font-size:12px;
+      font-weight:900;
       color:#111827;
-      font-size:14px;
-      text-shadow:0 1px 0 rgba(255,255,255,.75);
-      pointer-events:none;
     }
 
     .kitimus{
-      justify-self:end;
-      align-self:center;
-      width: clamp(52px, 10vw, 76px);
-      height: clamp(52px, 10vw, 76px);
-      pointer-events:none;
+      width:64px;
+      height:64px;
       user-select:none;
+      pointer-events:none;
     }
     .kitimus img{
       width:100%;
       height:100%;
       object-fit:contain;
-      display:block;
     }
 
     .card{
-      position:relative;
       background:var(--card);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:var(--pad);
+      padding:16px;
       display:flex;
       flex-direction:column;
-      gap:var(--gap);
-      overflow:hidden;
+      gap:14px;
     }
 
-    .cornerMark{
-      position:absolute;
-      right:18px;
-      top:50%;
-      transform:translateY(-10%);
-      font-size:64px;
-      font-weight:1000;
-      line-height:1;
-      display:none;
-      user-select:none;
-      pointer-events:none;
-    }
-    .cornerMark.ok{ color: var(--good); display:block; }
-    .cornerMark.bad{ color: var(--bad); display:block; }
-
-    .qtitle{
-      font-size:var(--h1);
-      font-weight:1000;
-      line-height:1.05;
-      margin-top:2px;
-    }
-    .qsub{
-      color:var(--muted);
-      font-weight:800;
-      margin-bottom:2px;
-      font-size:var(--h2);
-    }
-
-    .mark{
-      visibility:hidden;
-      font-weight:1000;
-      line-height:1;
-      font-size: clamp(34px, 9vw, 70px);
-      min-width: 44px;
-      text-align:right;
-      user-select:none;
-    }
-    .mark.good{ color: var(--good); }
-    .mark.bad{  color: var(--bad);  }
-
-    .titleRow{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-    }
-
-    /* Fill blanks UI */
-    .blankLine{
-      background:#fff;
-      border-radius:16px;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-      padding:14px 12px;
-      font-size: clamp(16px, 4.2vw, 20px);
-      font-weight:900;
-      line-height:1.35;
-    }
-    select.blank{
-      font-weight:1000;
-      font-size:inherit;
-      border-radius:12px;
-      border:2px solid #e5e7eb;
-      padding:8px 10px;
-      background:#fff;
-      cursor:pointer;
-      margin:0 4px;
-    }
-    select.blank:focus{ outline:3px solid rgba(29,78,216,.20); outline-offset:2px; }
-
-    .bank{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-    }
-    .chip{
-      display:inline-block;
-      border-radius:999px;
-      padding:8px 10px;
-      background:#eef2ff;
-      color:#28327a;
-      font-weight:900;
-      font-size:14px;
-      white-space:nowrap;
-    }
-
-    /* Tiles */
-    .capWrap{
-      display:none;
-      flex-direction:column;
-      gap:12px;
-    }
-    .capWrap.show{ display:flex; }
-
-    .slots{
-      width:100%;
-      border-radius:16px;
-      background:#fff;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-      padding:14px 12px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      align-items:center;
-      justify-content:center;
-      overflow:hidden;
-    }
-    .slotRow{
-      display:flex;
-      gap:8px;
-      justify-content:center;
-      width:100%;
-      flex-wrap:nowrap;
-    }
-    .slot{
-      min-width:0;
-      width:auto;
-      flex:0 0 auto;
-      text-align:center;
+    .ref{
       font-weight:1000;
       font-size:18px;
-      line-height:1;
-      color:#111827;
-      user-select:none;
-      padding:0 2px 6px 2px;
-      border-bottom:4px solid #94a3b8;
-      min-height:28px;
-      letter-spacing:.5px;
     }
-    .slot.empty{ color:transparent; }
-    .slot.space{
-      border-bottom:0;
-      width:14px;
-      padding:0;
+    .prompt{
+      font-weight:800;
+      line-height:1.4;
     }
 
-    .tileGrid{
-      width:100%;
+    select{
+      font-size:16px;
+      font-weight:800;
+      padding:8px 10px;
+      border-radius:10px;
+      border:2px solid #e5e7eb;
+      margin:0 4px;
+    }
+
+    .tiles{
       display:grid;
-      grid-template-columns:repeat(6, minmax(0, 1fr));
+      grid-template-columns:repeat(6,1fr);
       gap:10px;
-      justify-content:center;
-      align-content:start;
-      padding:4px 2px;
     }
     .tile{
-      border-radius:18px;
+      border-radius:14px;
       border:2px solid #e5e7eb;
-      background:#fff;
       padding:14px 0;
-      font-size:22px;
-      font-weight:1000;
       text-align:center;
+      font-weight:1000;
+      font-size:20px;
       cursor:pointer;
       user-select:none;
-      transition:transform .05s ease, border-color .1s ease, background .1s ease;
+      background:#fff;
     }
-    .tile:active{ transform:scale(.99); }
     .tile.used{
       opacity:.35;
       cursor:not-allowed;
     }
 
-    .bottom{
+    .slots{
       display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+      gap:6px;
+      justify-content:center;
+      margin-bottom:8px;
     }
+    .slot{
+      min-width:22px;
+      border-bottom:4px solid #94a3b8;
+      text-align:center;
+      font-weight:1000;
+      font-size:18px;
+    }
+
     .btn{
-      flex:1;
-      min-width:140px;
-      padding:14px 14px;
+      margin-top:10px;
+      padding:14px;
       border-radius:16px;
       border:0;
-      font-size:16px;
-      font-weight:1000;
-      cursor:pointer;
       background:var(--btn);
-      color:#fff;
-      box-shadow:0 10px 20px rgba(0,0,0,.10);
-    }
-    .btn.secondary{
-      background:var(--btn2);
-      color:var(--btn2text);
-      box-shadow:none;
-    }
-    .btn:disabled{
-      opacity:.45;
-      cursor:not-allowed;
-      box-shadow:none;
-    }
-    .btn.good{ background: var(--good) !important; color:#fff !important; }
-    .btn.bad{  background: var(--bad)  !important; color:#fff !important; }
-
-    .review{
-      margin-top:6px;
-      padding:12px;
-      border-radius:16px;
-      background:#f8fafc;
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-    }
-    .review h2{
-      margin:0 0 6px 0;
-      font-size:16px;
+      color:var(--btnText);
       font-weight:1000;
+      font-size:16px;
+      cursor:pointer;
     }
-    .review ul{
-      margin:0;
-      padding-left:18px;
-      color:#111827;
-      font-weight:800;
-    }
-    .small{
-      font-size:13px;
-      color:var(--muted);
-      font-weight:800;
-      margin-top:8px;
-      line-height:1.35;
-    }
+    .btn.good{ background:var(--good); }
+    .btn.bad{ background:var(--bad); }
   </style>
 </head>
 
 <body>
-  <header>
-    <a href="./index.html">← Back</a>
-    <h1>Practice Test</h1>
-    <div class="spacer"></div>
-  </header>
+<header>
+  <a href="./index.html">← Back</a>
+  <h1>Practice Test</h1>
+  <div class="spacer"></div>
+</header>
 
-  <main>
-    <div class="wrap">
-      <div class="toprow">
-        <div class="pill" id="sectionPill">Blanks</div>
-        <div class="barwrap" aria-label="Progress">
-          <div class="bar" id="bar"></div>
-          <div class="bartext" id="barText">1 of 1</div>
-        </div>
+<main>
+  <div class="wrap">
 
-        <div class="kitimus" aria-hidden="true">
-          <img id="kitimusImg" src="/memory/mascots/kitimus/kitimus-neutral.png" alt="">
-        </div>
+    <div class="toprow">
+      <div class="pill" id="modePill">Blanks</div>
+      <div class="progress">
+        <div class="bar" id="bar"></div>
+        <div class="bartext" id="barText"></div>
       </div>
-
-      <section class="card" id="card">
-        <div class="cornerMark" id="cornerMark" aria-hidden="true"></div>
-
-        <div class="titleRow">
-          <div>
-            <div class="qtitle" id="qtitle"></div>
-            <div class="qsub" id="qsub"></div>
-          </div>
-          <div class="mark" id="mark" aria-hidden="true"></div>
-        </div>
-
-        <div id="blanksWrap" style="display:none;"></div>
-
-        <div class="capWrap" id="capWrap">
-          <div class="slots" id="slots"></div>
-          <div class="tileGrid" id="tileGrid"></div>
-        </div>
-
-        <div class="bottom" id="bottomBtns" style="display:flex;">
-          <button class="btn secondary" id="backspaceBtn" style="display:none;">Backspace</button>
-          <button class="btn secondary" id="clearBtn" style="display:none;">Clear</button>
-          <button class="btn" id="checkBtn">Check</button>
-        </div>
-
-        <div id="reviewBox" style="display:none;"></div>
-      </section>
+      <div class="kitimus">
+        <img id="kitimusImg" src="/mascots/kitimus/kitimus-squint.png" alt="">
+      </div>
     </div>
-  </main>
 
-  <script>
-    // =========================================================
-    // Memories Test Engine (Week 4 - Feb 4)
-    // Modes: Fill blanks (with word bank) + spelling tiles (with decoy letters)
-    // =========================================================
+    <section class="card" id="card"></section>
 
-    const KITIMUS = {
-      neutral: "/memory/mascots/kitimus/kitimus-neutral.png",
-      squint: "/memory/mascots/kitimus/kitimus-squint.png",
-      squintLeft: "/memory/mascots/kitimus/kitimus-squint-left.png",
-      squintRight: "/memory/mascots/kitimus/kitimus-squint-right.png",
-      blink: "/memory/mascots/kitimus/kitimus-blink.png",
-      celebrate: "/memory/mascots/kitimus/kitimus-celebrate.png"
-    };
+  </div>
+</main>
 
-    // Content for Feb 4
-    const DATA = {
-      title: "Week 4 – Feb 4",
-      verses: [
-        { ref: "John 15:16", text: "You did not choose me, but I chose you and appointed you." },
-        { ref: "Romans 10:17", text: "So faith comes from hearing, and hearing through the word of Christ." }
-      ],
-      blanks: [
-        {
-          ref: "John 15:16",
-          prompt: [
-            "You did not ",
-            { blankId:"b1", answer:"choose", options:["choose","chose","picked","select"] },
-            " me, but I ",
-            { blankId:"b2", answer:"chose", options:["chose","choose","called","named"] },
-            " you and ",
-            { blankId:"b3", answer:"appointed", options:["appointed","anointed","approved","assigned"] },
-            " you."
-          ],
-          bank: ["choose","chose","appointed","picked","select","called","named","anointed","approved","assigned"]
-        },
-        {
-          ref: "Romans 10:17",
-          prompt: [
-            "So ",
-            { blankId:"b4", answer:"faith", options:["faith","hope","trust","belief"] },
-            " comes from ",
-            { blankId:"b5", answer:"hearing", options:["hearing","reading","seeing","listening"] },
-            ", and hearing through the ",
-            { blankId:"b6", answer:"word", options:["word","voice","law","name"] },
-            " of ",
-            { blankId:"b7", answer:"Christ", options:["Christ","Jesus","God","Lord"] },
-            "."
-          ],
-          bank: ["faith","hearing","word","Christ","hope","trust","belief","reading","seeing","listening","voice","law","name","Jesus","God","Lord"]
-        }
-      ],
-      spelling: [
-        { word: "choose", decoys: ["e"] },
-        { word: "chose", decoys: ["o"] },
-        { word: "appointed", decoys: ["e","p"] },
-        { word: "faith", decoys: ["e"] },
-        { word: "hearing", decoys: ["i"] },
-        { word: "through", decoys: ["o"] },
-        { word: "Christ", decoys: ["e"] }
-      ]
-    };
+<script>
+/* ============================
+   DATA (LOCKED, CLEAN)
+============================ */
 
-    function shuffle(arr){
-      const a = arr.slice();
-      for(let i=a.length-1;i>0;i--){
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i],a[j]]=[a[j],a[i]];
-      }
-      return a;
-    }
+const QUESTIONS = [
+  // Blanks – John 15:16
+  {
+    mode:"blanks",
+    ref:"John 15:16",
+    text:'You did not ___ me, but I ___ you and ___ you.',
+    blanks:[
+      { answer:"choose", options:["choose","pick","select","approve"] },
+      { answer:"chose", options:["chose","picked","named","called"] },
+      { answer:"appointed", options:["appointed","assigned","anointed","approved"] }
+    ]
+  },
 
-    // Build question list (blanks first, then spelling)
-    const QUESTIONS = [
-      ...DATA.blanks.map(q => ({ section:"Blanks", type:"blanks", ...q })),
-      ...DATA.spelling.map(s => ({ section:"Spelling", type:"tiles", ...s }))
-    ];
+  // Blanks – Romans 10:17
+  {
+    mode:"blanks",
+    ref:"Romans 10:17",
+    text:'So faith comes from ___, and ___ through the word of Christ.',
+    blanks:[
+      { answer:"hearing", options:["hearing","learning","listening","speaking"] },
+      { answer:"hearing", options:["hearing","reading","knowing","believing"] }
+    ]
+  },
 
-    // UI hooks
-    const sectionPill = document.getElementById("sectionPill");
-    const bar = document.getElementById("bar");
-    const barText = document.getElementById("barText");
+  // Spelling tiles – significant words only
+  {
+    mode:"tiles",
+    ref:"John 15:16",
+    context:'You did not ___ me, but I chose you.',
+    answer:"choose"
+  },
+  {
+    mode:"tiles",
+    ref:"John 15:16",
+    context:'You did not choose me, but I ___ you.',
+    answer:"chose"
+  },
+  {
+    mode:"John 15:16",
+    context:'You did not choose me, but I chose you and ___ you.',
+    answer:"appointed"
+  }
+];
 
-    const qtitle = document.getElementById("qtitle");
-    const qsub = document.getElementById("qsub");
-    const markEl = document.getElementById("mark");
+/* ============================
+   ENGINE
+============================ */
 
-    const blanksWrap = document.getElementById("blanksWrap");
-    const capWrap = document.getElementById("capWrap");
-    const slotsEl = document.getElementById("slots");
-    const tileGrid = document.getElementById("tileGrid");
+let idx = 0;
+const card = document.getElementById("card");
+const bar = document.getElementById("bar");
+const barText = document.getElementById("barText");
+const pill = document.getElementById("modePill");
 
-    const reviewBox = document.getElementById("reviewBox");
-    const cornerMark = document.getElementById("cornerMark");
+function updateProgress(){
+  bar.style.width = `${((idx+1)/QUESTIONS.length)*100}%`;
+  barText.textContent = `${idx+1} of ${QUESTIONS.length}`;
+}
 
-    const bottomBtns = document.getElementById("bottomBtns");
-    const backspaceBtn = document.getElementById("backspaceBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const checkBtn = document.getElementById("checkBtn");
+function render(){
+  updateProgress();
+  card.innerHTML = "";
+  const q = QUESTIONS[idx];
+  pill.textContent = q.mode === "blanks" ? "Blanks" : "Spelling";
 
-    const kitimusImg = document.getElementById("kitimusImg");
+  if(q.mode === "blanks"){
+    const p = document.createElement("div");
+    p.className = "prompt";
+    let blankIndex = 0;
 
-    function setKitimus(state){
-      const src = KITIMUS[state] || KITIMUS.neutral;
-      if(kitimusImg.getAttribute("src") !== src){
-        kitimusImg.setAttribute("src", src);
-      }
-    }
+    p.innerHTML = q.text.replace("___", () => {
+      const b = q.blanks[blankIndex++];
+      return `<select data-answer="${b.answer}">
+        <option value="">---</option>
+        ${b.options.map(o => `<option>${o}</option>`).join("")}
+      </select>`;
+    });
 
-    let kitimusIdleTimer = null;
-    let locked = false;
+    card.innerHTML = `<div class="ref">${q.ref}</div>`;
+    card.appendChild(p);
 
-    function stopKitimusIdle(){
-      if(kitimusIdleTimer){
-        clearInterval(kitimusIdleTimer);
-        kitimusIdleTimer = null;
-      }
-    }
-    function startKitimusIdle(){
-      stopKitimusIdle();
-      setKitimus("squint");
-
-      kitimusIdleTimer = setInterval(() => {
-        if(locked) return;
-        const r = Math.random();
-
-        if(r < 0.22){
-          setKitimus("blink");
-          setTimeout(() => setKitimus("squint"), 140);
-          return;
-        }
-
-        if(r < 0.55){
-          const dir = (Math.random() < 0.5) ? "squintLeft" : "squintRight";
-          setKitimus(dir);
-          setTimeout(() => setKitimus("squint"), 220);
-          return;
-        }
-
-        setKitimus("squint");
-      }, 2200);
-    }
-
-    function kitimusWrongPulse(){
-      setTimeout(() => setKitimus("neutral"), 150);
-      setTimeout(() => setKitimus("squint"), 650);
-    }
-
-    function resetMarks(){
-      markEl.textContent = "";
-      markEl.classList.remove("good","bad");
-      markEl.style.visibility = "hidden";
-
-      cornerMark.style.display = "none";
-      cornerMark.classList.remove("ok","bad");
-      cornerMark.textContent = "";
-
-      reviewBox.style.display = "none";
-      reviewBox.innerHTML = "";
-    }
-
-    function showMark(ok){
-      markEl.style.visibility = "visible";
-      markEl.textContent = ok ? "✓" : "✕";
-      markEl.classList.toggle("good", ok);
-      markEl.classList.toggle("bad", !ok);
-    }
-
-    function showCorner(mode){
-      cornerMark.style.display = "block";
-      cornerMark.textContent = (mode === "ok") ? "✓" : "✕";
-      cornerMark.classList.toggle("ok", mode === "ok");
-      cornerMark.classList.toggle("bad", mode !== "ok");
-    }
-
-    let idx = 0;
-    const results = [];
-    const missed = new Set();
-
-    function setProgress(){
-      const n = QUESTIONS.length;
-      const pos = idx + 1;
-      const pct = Math.round((pos / n) * 100);
-      bar.style.width = pct + "%";
-      barText.textContent = `${pos} of ${n}`;
-      sectionPill.textContent = QUESTIONS[idx].section;
-    }
-
-    // ---------- Blanks renderer ----------
-    function renderBlanks(q){
-      blanksWrap.style.display = "block";
-      capWrap.classList.remove("show");
-
-      backspaceBtn.style.display = "none";
-      clearBtn.style.display = "none";
-      checkBtn.style.display = "inline-block";
-      checkBtn.disabled = false;
-      checkBtn.classList.remove("good","bad");
-      checkBtn.textContent = "Check";
-
-      qtitle.textContent = q.ref;
-      qsub.textContent = "Fill in the blanks.";
-
-      // Build line with selects
-      const line = document.createElement("div");
-      line.className = "blankLine";
-
-      q.prompt.forEach(part => {
-        if(typeof part === "string"){
-          line.appendChild(document.createTextNode(part));
-          return;
-        }
-
-        const sel = document.createElement("select");
-        sel.className = "blank";
-        sel.setAttribute("data-answer", part.answer);
-        sel.setAttribute("data-id", part.blankId);
-
-        const opt0 = document.createElement("option");
-        opt0.value = "";
-        opt0.textContent = "_____";
-        sel.appendChild(opt0);
-
-        part.options.forEach(w => {
-          const o = document.createElement("option");
-          o.value = w;
-          o.textContent = w;
-          sel.appendChild(o);
-        });
-
-        line.appendChild(sel);
+    const btn = document.createElement("button");
+    btn.className = "btn";
+    btn.textContent = "Check";
+    btn.onclick = () => {
+      const selects = card.querySelectorAll("select");
+      let ok = true;
+      selects.forEach(s => {
+        if(s.value !== s.dataset.answer) ok = false;
       });
-
-      // Word bank chips
-      const bank = document.createElement("div");
-      bank.className = "bank";
-      q.bank.forEach(w => {
-        const c = document.createElement("span");
-        c.className = "chip";
-        c.textContent = w;
-        bank.appendChild(c);
-      });
-
-      blanksWrap.innerHTML = "";
-      blanksWrap.appendChild(line);
-      blanksWrap.appendChild(bank);
-
-      checkBtn.onclick = () => {
-        if(locked) return;
-        locked = true;
-
-        const selects = Array.from(blanksWrap.querySelectorAll("select.blank"));
-        let okAll = true;
-
-        selects.forEach(sel => {
-          const ans = sel.getAttribute("data-answer");
-          const val = sel.value;
-          if(val !== ans) okAll = false;
-        });
-
-        showMark(okAll);
-        checkBtn.classList.add(okAll ? "good" : "bad");
-        checkBtn.disabled = true;
-
-        results.push({ q, ok: okAll });
-        if(!okAll){
-          missed.add(q.ref);
-          kitimusWrongPulse();
-        }
-
-        setTimeout(() => advance(), 650);
-      };
-    }
-
-    // ---------- Tiles renderer (with decoy letters) ----------
-    let tileState = null;
-
-    function buildTileState(word, decoys){
-      const target = word.toUpperCase().replace(/[^A-Z]/g,"");
-      const letters = target.split("");
-      const extra = (decoys || []).map(ch => (ch || "").toUpperCase()).filter(ch => /^[A-Z]$/.test(ch));
-      const tiles = shuffle([...letters, ...extra].map((ch, i) => ({ ch, id:i })));
-
-      return {
-        target,
-        letters,
-        filled: new Array(letters.length).fill(""),
-        filledTileIndex: new Array(letters.length).fill(-1),
-        tiles,
-        used: new Array(tiles.length).fill(false)
-      };
-    }
-
-    function renderSlots(ts){
-      slotsEl.innerHTML = "";
-      const row = document.createElement("div");
-      row.className = "slotRow";
-
-      for(let i=0;i<ts.letters.length;i++){
-        const slot = document.createElement("div");
-        slot.className = "slot";
-        const v = ts.filled[i] || "";
-        if(!v) slot.classList.add("empty");
-        slot.textContent = v || "·";
-        row.appendChild(slot);
-      }
-      slotsEl.appendChild(row);
-    }
-
-    function renderTiles(ts){
-      tileGrid.innerHTML = "";
-      ts.tiles.forEach((t, index) => {
-        const b = document.createElement("button");
-        b.className = "tile";
-        b.type = "button";
-        b.textContent = t.ch;
-
-        if(ts.used[index]){
-          b.classList.add("used");
-          b.disabled = true;
-        }
-
-        b.addEventListener("click", () => {
-          if(locked) return;
-          if(ts.used[index]) return;
-
-          const next = ts.filled.findIndex(x => x === "");
-          if(next === -1) return;
-
-          ts.filled[next] = t.ch;
-          ts.filledTileIndex[next] = index;
-          ts.used[index] = true;
-
-          renderSlots(ts);
-          renderTiles(ts);
-        });
-
-        tileGrid.appendChild(b);
-      });
-    }
-
-    function renderTilesQuestion(q){
-      blanksWrap.style.display = "none";
-      capWrap.classList.add("show");
-
-      backspaceBtn.style.display = "inline-block";
-      clearBtn.style.display = "inline-block";
-      checkBtn.style.display = "inline-block";
-
-      qtitle.textContent = q.word;
-      qsub.textContent = "Tap the letters to spell the word.";
-
-      tileState = buildTileState(q.word, q.decoys);
-
-      renderSlots(tileState);
-      renderTiles(tileState);
-
-      clearBtn.onclick = () => {
-        if(locked) return;
-        tileState = buildTileState(q.word, q.decoys);
-        renderSlots(tileState);
-        renderTiles(tileState);
-      };
-
-      backspaceBtn.onclick = () => {
-        if(locked) return;
-
-        let last = -1;
-        for(let i = tileState.filled.length - 1; i >= 0; i--){
-          if(tileState.filled[i] !== ""){ last = i; break; }
-        }
-        if(last === -1) return;
-
-        const tileIdx = tileState.filledTileIndex[last];
-        tileState.filled[last] = "";
-        tileState.filledTileIndex[last] = -1;
-
-        if(tileIdx !== -1) tileState.used[tileIdx] = false;
-
-        renderSlots(tileState);
-        renderTiles(tileState);
-      };
-
-      checkBtn.disabled = false;
-      checkBtn.classList.remove("good","bad");
-      checkBtn.textContent = "Check";
-
-      checkBtn.onclick = () => {
-        if(locked) return;
-        locked = true;
-
-        const attempt = tileState.filled.join("");
-        const ok = (attempt === tileState.target);
-
-        showMark(ok);
-        checkBtn.classList.add(ok ? "good" : "bad");
-        checkBtn.disabled = true;
-
-        results.push({ q, ok });
-        if(!ok){
-          missed.add("Spelling: " + q.word);
-          kitimusWrongPulse();
-        }
-
-        setTimeout(() => advance(), 650);
-      };
-    }
-
-    const RENDERERS = {
-      blanks: renderBlanks,
-      tiles: renderTilesQuestion
+      btn.classList.add(ok ? "good" : "bad");
+      setTimeout(next, 600);
     };
+    card.appendChild(btn);
+  }
 
-    function renderQuestion(){
-      const q = QUESTIONS[idx];
-      locked = false;
-      resetMarks();
-      setProgress();
-      startKitimusIdle();
-      RENDERERS[q.type](q);
-    }
+  if(q.mode === "tiles"){
+    card.innerHTML = `<div class="ref">${q.ref}</div>
+      <div class="prompt">${q.context}</div>`;
 
-    function advance(){
-      if(idx === QUESTIONS.length - 1){
-        showSummary();
-        stopKitimusIdle();
-        return;
-      }
-      idx++;
-      renderQuestion();
-    }
+    const slots = document.createElement("div");
+    slots.className = "slots";
+    q.answer.split("").forEach(() => {
+      const s = document.createElement("div");
+      s.className = "slot";
+      slots.appendChild(s);
+    });
+    card.appendChild(slots);
 
-    function showSummary(){
-      const total = results.length;
-      const correct = results.filter(r => r.ok).length;
-      const pct = total ? Math.round((correct / total) * 100) : 0;
+    const letters = shuffle(
+      q.answer.toUpperCase().split("")
+      .concat(["E","O"]) // decoys
+    );
 
-      qtitle.textContent = `Score: ${pct}%`;
-      qsub.textContent = `You got ${correct} out of ${total} correct.`;
+    const grid = document.createElement("div");
+    grid.className = "tiles";
+    letters.forEach(l => {
+      const t = document.createElement("div");
+      t.className = "tile";
+      t.textContent = l;
+      t.onclick = () => {
+        const empty = slots.querySelector(".slot:empty");
+        if(!empty) return;
+        empty.textContent = l;
+        t.classList.add("used");
+      };
+      grid.appendChild(t);
+    });
+    card.appendChild(grid);
 
-      blanksWrap.style.display = "none";
-      capWrap.classList.remove("show");
-      backspaceBtn.style.display = "none";
-      clearBtn.style.display = "none";
-      checkBtn.style.display = "none";
+    const btn = document.createElement("button");
+    btn.className = "btn";
+    btn.textContent = "Check";
+    btn.onclick = () => setTimeout(next,600);
+    card.appendChild(btn);
+  }
+}
 
-      const misses = Array.from(missed);
-      reviewBox.style.display = "block";
-      reviewBox.innerHTML = `
-        <div class="review">
-          <h2>${misses.length ? "Review these:" : "Nothing to review."}</h2>
-          ${misses.length ? `<ul>${misses.map(m => `<li>${m}</li>`).join("")}</ul>` : ""}
-          <div class="small">${misses.length ? "Try again after reviewing the verses." : "Nice work. Do one more run later to lock it in."}</div>
-        </div>
-      `;
+function next(){
+  if(idx < QUESTIONS.length-1){
+    idx++;
+    render();
+  } else {
+    card.innerHTML = "<h2>Nice work.</h2>";
+    bar.style.width = "100%";
+  }
+}
 
-      bar.style.width = "100%";
-      barText.textContent = `${total} of ${total}`;
+function shuffle(a){
+  const x = a.slice();
+  for(let i=x.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [x[i],x[j]]=[x[j],x[i]];
+  }
+  return x;
+}
 
-      if(pct === 100){
-        setTimeout(() => setKitimus("celebrate"), 200);
-        showCorner("ok");
-      } else if(pct >= 80){
-        setKitimus("squint");
-        showCorner("ok");
-      } else {
-        setKitimus("neutral");
-        showCorner("bad");
-      }
-    }
-
-    document.addEventListener("pointerdown", () => {
-      if(locked) return;
-      setKitimus("blink");
-      setTimeout(() => setKitimus("squint"), 120);
-    }, { passive:true });
-
-    renderQuestion();
-  </script>
+render();
+</script>
 </body>
 </html>
