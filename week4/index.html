@@ -94,15 +94,45 @@
       .card{display:flex; flex-direction:column}
       .card .btn{margin-top:auto}
     }
-  </style>
+  
+/* ===== Shared topbar nav (Back + Home) ===== */
+header .topbar{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:10px;
+}
+header .topbar h1{
+  margin:0;
+  font-size:16px;
+  font-weight:1000;
+  text-align:center;
+}
+
+header .navbtn{
+  appearance:none;
+  background:none;
+  border:0;
+  padding:0;
+  margin:0;
+  color:var(--link, #1d4ed8);
+  font-weight:900;
+  text-decoration:none;
+  cursor:pointer;
+  white-space:nowrap;
+  font:inherit;
+}
+header .home{ color:var(--link, #1d4ed8); font-weight:900; text-decoration:none; white-space:nowrap; }
+</style>
 </head>
 <body>
   <header>
-    <div class="topbar">
-      <h1 class="title">Week 4</h1>
-      <div class="back"><a href="../">← Back to Weeks</a></div>
-    </div>
-  </header>
+  <div class="wrap topbar">
+    <button class="navbtn" id="backBtn" type="button">← Back</button>
+    <h1>Week 4</h1>
+    <a class="home" href="https://kitimus.com/">Home</a>
+  </div>
+</header>
 
   <main>
     <section class="card">
@@ -117,5 +147,20 @@
       <a class="btn" href="./2-6/">Open Feb 6</a>
     </section>
   </main>
+
+<script>
+(function(){
+  const HOME = "https://kitimus.com/";
+  const back = document.getElementById("backBtn");
+  if(!back) return;
+  back.addEventListener("click", () => {
+    const before = location.href;
+    history.back();
+    setTimeout(() => {
+      if(location.href === before) location.href = HOME;
+    }, 350);
+  });
+})();
+</script>
 </body>
 </html>
