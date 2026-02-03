@@ -41,22 +41,32 @@
       color:var(--text);
     }
 
-    header{
+    /* ===== Shared topbar nav (Back + Home) ===== */
+    .topbar{
       position:sticky;
       top:0;
       z-index:10;
       background:#fff;
-      padding:12px 16px;
+      padding:10px 14px;
       box-shadow:0 1px 10px rgba(0,0,0,.06);
       display:flex;
       align-items:center;
-      justify-content:center;
+      gap:10px;
     }
-    header h1{
-      margin:0;
-      font-size:18px;
+    .topbar .navlink{
+      text-decoration:none;
+      font-weight:900;
+      color:var(--link);
+      white-space:nowrap;
+    }
+    .topbar .title{
+      flex:1;
+      text-align:center;
       font-weight:1000;
-      letter-spacing:.2px;
+      font-size:16px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     main{
@@ -164,57 +174,16 @@
       font-size:20px;
       cursor:pointer;
     }
-
     .btn:active{ transform:translateY(1px); }
+  </style>
+</head>
 
-    a.clean{
-      color:var(--link);
-      text-decoration:none;
-      font-weight:900;
-    }
-  
-/* ===== Shared topbar nav (Back + Home) ===== */
-    <header class="topbar">
-  <a class="navlink" href="#" id="backLink">← Back</a>
-  <div class="title" id="pageTitle">Week 4 (2-6)</div>
-  <a class="navlink" href="https://kitimus.com/">Home</a>
-</header>
-
-<script>
-  // Back button: use history if possible, otherwise go Home
-  document.getElementById("backLink").addEventListener("click", function (e) {
-    e.preventDefault();
-    if (window.history.length > 1) window.history.back();
-    else window.location.href = "https://kitimus.com/";
-  });
-</script>
-
-    .topbar{
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: #fff;
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 1px 10px rgba(0,0,0,.06);
-}
-
-.topbar .title{
-  flex: 1;
-  text-align: center;
-  font-weight: 900;
-}
-
-.topbar .navlink{
-  text-decoration: none;
-  font-weight: 900;
-  color: #1d4ed8;
-  white-space: nowrap;
-}
-
-
+<body>
+  <header class="topbar">
+    <a class="navlink" href="#" id="backLink">← Back</a>
+    <div class="title" id="pageTitle">Week 4 (2-6)</div>
+    <a class="navlink" href="https://kitimus.com/">Home</a>
+  </header>
 
   <main>
     <div class="wrap">
@@ -250,19 +219,13 @@
     </div>
   </main>
 
-<script>
-(function(){
-  const HOME = "https://kitimus.com/";
-  const back = document.getElementById("backBtn");
-  if(!back) return;
-  back.addEventListener("click", () => {
-    const before = location.href;
-    history.back();
-    setTimeout(() => {
-      if(location.href === before) location.href = HOME;
-    }, 350);
-  });
-})();
-</script>
+  <script>
+    // Back button: use history if possible, otherwise go Home
+    document.getElementById("backLink").addEventListener("click", function (e) {
+      e.preventDefault();
+      if (window.history.length > 1) window.history.back();
+      else window.location.href = "https://kitimus.com/";
+    });
+  </script>
 </body>
 </html>
