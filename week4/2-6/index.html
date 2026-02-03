@@ -174,42 +174,46 @@
     }
   
 /* ===== Shared topbar nav (Back + Home) ===== */
-header .topbar{
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  align-items:center;
-  gap:10px;
-}
-header .topbar h1{
-  margin:0;
-  font-size:16px;
-  font-weight:1000;
-  text-align:center;
-}
-
-header .navbtn{
-  appearance:none;
-  background:none;
-  border:0;
-  padding:0;
-  margin:0;
-  color:var(--link, #1d4ed8);
-  font-weight:900;
-  text-decoration:none;
-  cursor:pointer;
-  white-space:nowrap;
-  font:inherit;
-}
-header .home{ color:var(--link, #1d4ed8); font-weight:900; text-decoration:none; white-space:nowrap; }
-</style>
-</head>
-
-<body>
-  <header>
-    <button class="navbtn" id="backBtn" type="button">← Back</button>
-    <h1>Week 4 (2-6)</h1>
-    <a class="home" href="https://kitimus.com/">Home</a>
+    <header class="topbar">
+  <a class="navlink" href="#" id="backLink">← Back</a>
+  <div class="title" id="pageTitle">Week 4 (2-6)</div>
+  <a class="navlink" href="https://kitimus.com/">Home</a>
 </header>
+
+<script>
+  // Back button: use history if possible, otherwise go Home
+  document.getElementById("backLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.history.length > 1) window.history.back();
+    else window.location.href = "https://kitimus.com/";
+  });
+</script>
+
+    .topbar{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 1px 10px rgba(0,0,0,.06);
+}
+
+.topbar .title{
+  flex: 1;
+  text-align: center;
+  font-weight: 900;
+}
+
+.topbar .navlink{
+  text-decoration: none;
+  font-weight: 900;
+  color: #1d4ed8;
+  white-space: nowrap;
+}
+
 
 
   <main>
