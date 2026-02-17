@@ -177,6 +177,18 @@
   </style>
 </head>
 
+  <script>
+  // Back button: use history if possible, otherwise go Home
+  document.getElementById("backLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = "https://kitimus.com/";
+    }
+  });
+</script>
+
 <body>
   <header class="topbar">
     <a class="navlink" href="#" id="backLink">← Back</a>
