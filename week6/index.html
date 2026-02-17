@@ -2,165 +2,230 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Week 6</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Week 6 (2-18)</title>
+
+  <!-- Titan One -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Titan+One&display=swap" rel="stylesheet">
+
+  <!-- Kitimus preload -->
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-neutral.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-blink.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint-left.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-squint-right.png">
+  <link rel="preload" as="image" href="/mascots/kitimus/kitimus-celebrate.png">
+
   <style>
     :root{
       --bg:#f4f6fb;
       --card:#ffffff;
       --text:#0f172a;
       --muted:#475569;
-      --shadow:0 10px 30px rgba(15,23,42,.10);
+      --shadow:0 10px 30px rgba(15,23,42,.12);
       --radius:18px;
+      --pillBg:#eef2ff;
+      --pillText:#28327a;
       --btn:#0f172a;
       --btnText:#ffffff;
       --link:#1d4ed8;
     }
+
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
       background:var(--bg);
+      color:var(--text);
     }
-    header{
+
+    /* ===== Shared topbar nav (Back + Home) ===== */
+    .topbar{
       position:sticky;
       top:0;
-      background:#fff;
-      box-shadow:0 1px 10px rgba(0,0,0,.06);
-      padding:10px 14px;
       z-index:10;
-    }
-    .topbar{
-      max-width:980px;
-      margin:0 auto;
+      background:#fff;
+      padding:10px 14px;
+      box-shadow:0 1px 10px rgba(0,0,0,.06);
       display:flex;
       align-items:center;
-      justify-content:space-between;
-      gap:12px;
+      gap:10px;
     }
-    .title{
-      font-weight:800;
-      font-size:20px;
-      margin:0;
-      line-height:1.2;
-    }
-    .back a{
-      color:var(--link);
+    .topbar .navlink{
       text-decoration:none;
-      font-weight:700;
+      font-weight:900;
+      color:var(--link);
       white-space:nowrap;
     }
-    main{
-      max-width:980px;
-      margin:0 auto;
-      padding:18px 14px 40px;
-      display:grid;
-      gap:14px;
+    .topbar .title{
+      flex:1;
+      text-align:center;
+      font-weight:1000;
+      font-size:16px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
+
+    main{
+      padding:14px;
+      display:flex;
+      justify-content:center;
+    }
+    .wrap{
+      width:100%;
+      max-width:980px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:start;
+      margin:10px 0 14px;
+    }
+    .hero h2{
+      margin:0;
+      font-size:34px;
+      font-weight:1000;
+      letter-spacing:.2px;
+    }
+    .hero p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-weight:800;
+      font-size:18px;
+    }
+    .kitimus{
+      width:72px;
+      height:72px;
+      user-select:none;
+      pointer-events:none;
+    }
+    .kitimus img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
     .card{
       background:var(--card);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
       padding:18px;
+      margin:0 0 14px;
     }
-    .card h2{
-      margin:0 0 6px 0;
-      font-size:22px;
+
+    .pill{
+      display:inline-block;
+      background:var(--pillBg);
+      color:var(--pillText);
+      font-weight:1000;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:13px;
+      margin-bottom:10px;
     }
-    .card p{
-      margin:0 0 14px 0;
+
+    .ref{
+      font-family:"Titan One", system-ui, sans-serif;
+      font-size:34px;
+      letter-spacing:.4px;
+      margin:2px 0 6px;
+    }
+    .verse{
+      font-weight:900;
+      font-size:20px;
+      line-height:1.35;
+      margin:0 0 12px;
+    }
+
+    .tip{
       color:var(--muted);
-      font-size:16px;
+      font-weight:900;
+      font-size:18px;
+      margin:0;
+    }
+
+    .testTitle{
+      font-family:"Titan One", system-ui, sans-serif;
+      font-size:26px;
+      margin:2px 0 6px;
+      letter-spacing:.2px;
+    }
+    .testDesc{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-weight:900;
+      font-size:18px;
       line-height:1.35;
     }
+
     .btn{
-      display:inline-block;
       width:100%;
-      text-align:center;
-      padding:14px 16px;
-      border-radius:14px;
+      padding:18px 16px;
+      border-radius:16px;
+      border:0;
       background:var(--btn);
       color:var(--btnText);
-      text-decoration:none;
-      font-weight:800;
-      font-size:18px;
-      border:0;
+      font-weight:1000;
+      font-size:20px;
       cursor:pointer;
     }
-    @media (min-width:860px){
-      main{grid-template-columns:1fr 1fr}
-      .btn{width:auto; min-width:240px}
-      .card{display:flex; flex-direction:column}
-      .card .btn{margin-top:auto}
-    }
-
-/* ===== Shared topbar nav (Back + Home) ===== */
-header .topbar{
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  align-items:center;
-  gap:10px;
-}
-header .topbar h1{
-  margin:0;
-  font-size:16px;
-  font-weight:1000;
-  text-align:center;
-}
-
-header .navbtn{
-  appearance:none;
-  background:none;
-  border:0;
-  padding:0;
-  margin:0;
-  color:var(--link, #1d4ed8);
-  font-weight:900;
-  text-decoration:none;
-  cursor:pointer;
-  white-space:nowrap;
-  font:inherit;
-}
-header .home{ color:var(--link, #1d4ed8); font-weight:900; text-decoration:none; white-space:nowrap; }
-</style>
+    .btn:active{ transform:translateY(1px); }
+  </style>
 </head>
+
 <body>
-  <header>
-    <div class="wrap topbar">
-      <button class="navbtn" id="backBtn" type="button">← Back</button>
-      <h1>Week 6</h1>
-      <a class="home" href="https://kitimus.com/">Home</a>
-    </div>
+  <header class="topbar">
+    <a class="navlink" href="#" id="backLink">← Back</a>
+    <div class="title" id="pageTitle">Week 6 (2-18)</div>
+    <a class="navlink" href="https://kitimus.com/">Home</a>
   </header>
 
   <main>
-    <section class="card">
-      <h2>Feb 18</h2>
-      <p>Hallowed be Thy Name</p>
-      <a class="btn" href="./2-18/">Open Feb 18</a>
-    </section>
+    <div class="wrap">
 
-    <section class="card">
-      <h2>Feb 20</h2>
-      <p>How is God’s name kept holy?</p>
-      <a class="btn" href="./2-20/">Open Feb 20</a>
-    </section>
+      <section class="hero">
+        <div>
+          <h2>Memories</h2>
+          <p>Read the verse, then take the practice test.</p>
+        </div>
+
+        <div class="kitimus">
+          <img src="/mascots/kitimus/kitimus-squint.png" alt="">
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="pill">Verses</div>
+
+        <div class="ref">Hallowed be Thy Name</div>
+        <p class="verse">Hallowed be Thy Name. What does this mean? God's name is certainly holy in itself, but we pray in this petition that it may be kept holy among us also.</p>
+
+        <p class="tip">Tip: Read it out loud a few times, then try the test. Focus on the important words.</p>
+      </section>
+
+      <section class="card">
+        <div class="pill">Practice Test</div>
+        <div class="testTitle">Practice Test</div>
+        <p class="testDesc">Fill in the blanks using dropdown choices, then spelling tiles with decoy letters.</p>
+
+        <button class="btn" onclick="location.href='./test.html'">Start Practice Test</button>
+      </section>
+
+    </div>
   </main>
 
-<script>
-(function(){
-  const HOME = "https://kitimus.com/";
-  const back = document.getElementById("backBtn");
-  if(!back) return;
-  back.addEventListener("click", () => {
-    const before = location.href;
-    history.back();
-    setTimeout(() => {
-      if(location.href === before) location.href = HOME;
-    }, 350);
-  });
-})();
-</script>
+  <script>
+    // Back button: use history if possible, otherwise go Home
+    document.getElementById("backLink").addEventListener("click", function (e) {
+      e.preventDefault();
+      if (window.history.length > 1) window.history.back();
+      else window.location.href = "https://kitimus.com/";
+    });
+  </script>
 </body>
 </html>
