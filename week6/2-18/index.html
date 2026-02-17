@@ -41,6 +41,7 @@
       color:var(--text);
     }
 
+    /* ===== Shared topbar nav (Back + Home) ===== */
     .topbar{
       position:sticky;
       top:0;
@@ -177,22 +178,10 @@
   </style>
 </head>
 
-  <script>
-  // Back button: use history if possible, otherwise go Home
-  document.getElementById("backLink").addEventListener("click", function (e) {
-    e.preventDefault();
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      window.location.href = "https://kitimus.com/";
-    }
-  });
-</script>
-
 <body>
   <header class="topbar">
     <a class="navlink" href="#" id="backLink">← Back</a>
-    <div class="title">Week 6 (2-18)</div>
+    <div class="title" id="pageTitle">Week 6 (2-18)</div>
     <a class="navlink" href="https://kitimus.com/">Home</a>
   </header>
 
@@ -204,6 +193,7 @@
           <h2>Memories</h2>
           <p>Read the verse, then take the practice test.</p>
         </div>
+
         <div class="kitimus">
           <img src="/mascots/kitimus/kitimus-squint.png" alt="">
         </div>
@@ -213,5 +203,5 @@
         <div class="pill">Verses</div>
 
         <div class="ref">Hallowed be Thy Name</div>
-        <p class="verse">
-          Hallowed be Thy Name. What does this mean? God's name is certainly holy in itself, but we pray in this petition that it may be kept holy among us also.
+        <p class="verse">Hallowed be Thy Name. What does this mean? God's name is certainly holy in itself, but we pray in this petition that it may be kept holy among us also.</p>
+
