@@ -203,4 +203,32 @@
         <div class="pill">Verses</div>
 
         <div class="ref">Thy Kingdom Come</div>
-        <p class="verse">Thy Kingdom Come. What does this mean? The kingdom of God certainly comes by itself without our prayer, but we
+        <p class="verse">Thy Kingdom Come. What does this mean? The kingdom of God certainly comes by itself without our prayer, but we pray in this petition that it may come to us also.<br><br>Revelation 22:20 - He who testifies to these things says, "Surely I am coming soon." Amen. Come, Lord Jesus!</p>
+
+        <div class="ref">Revelations 22:20</div>
+        <p class="verse">He who testifies to these things says, "Surely I am comeing soon." Amen. Come, Lord Jesus!</p>
+
+        <p class="tip">Tip: Read it out loud a few times, then try the test. Focus on the important words.</p>
+      </section>
+
+      <section class="card">
+        <div class="pill">Practice Test</div>
+        <div class="testTitle">Practice Test</div>
+        <p class="testDesc">Fill in the blanks using dropdown choices, then spelling tiles with decoy letters.</p>
+
+        <button class="btn" onclick="location.href='./test.html'">Start Practice Test</button>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    // Back button: use history if possible, otherwise go Home
+    document.getElementById("backLink").addEventListener("click", function (e) {
+      e.preventDefault();
+      if (window.history.length > 1) window.history.back();
+      else window.location.href = "https://kitimus.com/";
+    });
+  </script>
+</body>
+</html>
