@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Memory 3-11</title>
+<style>
+:root{--blue:#2fa4e7;--green:#2faf9b;--ink:#18324a;--paper:#f5fbff;--card:#ffffff;--line:#cfe7f6;--shadow:0 10px 24px rgba(24,50,74,.10)}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#eef8ff,#f9fdff);color:var(--ink)}
+header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 16px;background:#fff;border-bottom:2px solid var(--line);position:sticky;top:0}
+header .left{justify-self:start} header .center{justify-self:center} header .right{justify-self:end}
+.btn,.navbtn{display:inline-flex;align-items:center;gap:.45rem;text-decoration:none;border:none;background:var(--blue);color:#fff;padding:10px 14px;border-radius:14px;font-weight:700;cursor:pointer}
+.navbtn.alt{background:var(--green)}
+img.kit{height:58px;width:auto;display:block}
+main{max-width:980px;margin:0 auto;padding:24px 16px 48px}
+.hero,.card,.linebox{background:#fff;border:2px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+.hero{padding:24px;text-align:center}.hero h1{margin:0 0 8px;font-size:2rem}.hero p{line-height:1.7;max-width:780px;margin:10px auto 0}
+.controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px 0}
+.controls button{border:none;border-radius:14px;padding:10px 14px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}
+.controls button.alt{background:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:12px}
+.card{padding:18px;text-align:center}.label{font-size:.85rem;color:#55768e;text-transform:uppercase;letter-spacing:.04em}.big{font-size:1.25rem;font-weight:700;margin-top:8px}
+.linebox{padding:18px;margin-top:16px}.linebox h2{margin-top:0}
+.lines{display:grid;gap:10px}.verse-line{padding:12px 14px;border:2px dashed var(--line);border-radius:16px;background:var(--paper);display:none;line-height:1.6}
+.verse-line.show{display:block}
+.tip{color:#55768e;text-align:center;margin-top:10px}
+.footer-actions{display:flex;justify-content:center;margin-top:20px}
+</style>
+</head>
+<body>
+<header>
+  <div class="left"><button class="navbtn" onclick="history.back()">← Back</button></div>
+  <div class="center"><img class="kit" src="../../../mascots/kitimus/kitimus-neutral.png" alt="Kitimus"></div>
+  <div class="right"><a class="navbtn alt" href="https://kitimus.com/">Home</a></div>
+</header>
+<main>
+  <section class="hero">
+    <h1>Memory Verse — 3-11</h1>
+    <p>How is God's will done? Practice the verse a little at a time, then reveal the full answer when you are ready.</p>
+  </section>
+
+  <div class="controls">
+    <button onclick="showNextLine()">Reveal Next Line</button>
+    <button class="alt" onclick="showAllLines()">Reveal All</button>
+    <button onclick="hideLines()">Hide All</button>
+  </div>
+
+  <section class="grid">
+    <article class="card"><div class="label">Question</div><div class="big">How is God's will done?</div></article>
+    <article class="card"><div class="label">Goal</div><div class="big">Learn it in small parts</div></article>
+    <article class="card"><div class="label">Practice</div><div class="big">Tap, read, repeat</div></article>
+  </section>
+
+  <section class="linebox">
+    <h2>Verse Practice</h2>
+    <div class="lines" id="lines">
+      <div class="verse-line">God's will is done when He breaks and hinders every evil plan and purpose of the devil,</div>
+      <div class="verse-line">the world, and our sinful nature,</div>
+      <div class="verse-line">which do not want us to hallow God's name or let His kingdom come;</div>
+      <div class="verse-line">and when He strengthens and keeps us firm in His Word and faith until we die.</div>
+      <div class="verse-line">This is His good and gracious will.</div>
+    </div>
+    <p class="tip">Tip: Read each line out loud two times before revealing the next one.</p>
+  </section>
+
+  <div class="footer-actions">
+    <a class="btn" href="test.html">Go to Test</a>
+  </div>
+</main>
+<script>
+const verseLines=[...document.querySelectorAll('.verse-line')];
+let shown=0;
+function showNextLine(){ if(shown<verseLines.length){ verseLines[shown].classList.add('show'); shown++; } }
+function showAllLines(){ verseLines.forEach(v=>v.classList.add('show')); shown=verseLines.length; }
+function hideLines(){ verseLines.forEach(v=>v.classList.remove('show')); shown=0; }
+</script>
+</body>
+</html>

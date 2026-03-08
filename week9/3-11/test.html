@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Memory 3-11 Test</title>
+<style>
+:root{--blue:#2fa4e7;--green:#2faf9b;--ink:#18324a;--paper:#f5fbff;--card:#ffffff;--line:#cfe7f6;--shadow:0 10px 24px rgba(24,50,74,.10);--good:#1c9d62;--bad:#d9485f}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#eef8ff,#f9fdff);color:var(--ink)}
+header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 16px;background:#fff;border-bottom:2px solid var(--line);position:sticky;top:0}
+header .left{justify-self:start} header .center{justify-self:center} header .right{justify-self:end}
+.btn,.navbtn,.choice{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;text-decoration:none;border:none;background:var(--blue);color:#fff;padding:12px 14px;border-radius:14px;font-weight:700;cursor:pointer}
+.navbtn.alt{background:var(--green)}
+img.kit{height:58px;width:auto;display:block}
+main{max-width:980px;margin:0 auto;padding:24px 16px 48px}
+.panel{background:#fff;border:2px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:22px}
+.top{display:grid;gap:14px}.status{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-weight:700}.bar{height:14px;background:#e8f4fb;border-radius:999px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--blue));transition:width .25s}
+#question{font-size:1.3rem;line-height:1.5;margin:6px 0 0}.choices{display:grid;gap:12px;margin-top:16px}.choice{width:100%;background:#f3fbff;color:var(--ink);border:2px solid var(--line)}
+.choice:hover{background:#eaf8ff}.feedback{min-height:28px;margin-top:12px;font-weight:700}.good{color:var(--good)}.bad{color:var(--bad)}
+.hide{display:none}.chips{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:18px}.chip{padding:8px 12px;border-radius:999px;background:#edf8f4;border:1px solid #cdeee0;color:#1f7c57;font-weight:700}
+.order-wrap{margin-top:18px}.bank,.target{display:flex;flex-wrap:wrap;gap:10px;padding:14px;border-radius:18px;border:2px dashed var(--line);background:var(--paper);min-height:68px}.word{border:none;border-radius:999px;padding:10px 14px;background:#fff;border:2px solid var(--line);font-weight:700;cursor:pointer}.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.done{font-size:1.2rem;text-align:center}.done h2{margin-top:0}
+</style>
+</head>
+<body>
+<header>
+  <div class="left"><button class="navbtn" onclick="history.back()">← Back</button></div>
+  <div class="center"><img class="kit" src="../../../mascots/kitimus/kitimus-neutral.png" alt="Kitimus"></div>
+  <div class="right"><a class="navbtn alt" href="https://kitimus.com/">Home</a></div>
+</header>
+<main>
+  <section class="panel" id="mcPanel">
+    <div class="top">
+      <div class="status"><span id="progressText">Question 1 of 5</span><span id="scoreText">Score: 0</span></div>
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <div id="question"></div>
+      <div class="choices" id="choices"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </section>
+
+  <section class="panel order-wrap hide" id="orderPanel">
+    <h2>Put the ending in order</h2>
+    <p>Tap the chunks in the correct order.</p>
+    <div class="target" id="target"></div>
+    <div class="bank" id="bank"></div>
+    <div class="actions">
+      <button class="btn" onclick="checkOrder()">Check Order</button>
+      <button class="navbtn alt" onclick="resetOrder()">Reset</button>
+    </div>
+    <div class="feedback" id="orderFeedback"></div>
+  </section>
+
+  <section class="panel done hide" id="donePanel">
+    <h2>Nice work!</h2>
+    <p id="finalScore"></p>
+    <div class="chips">
+      <span class="chip">3-11 complete</span>
+      <span class="chip">Memory practice done</span>
+    </div>
+    <div class="actions">
+      <a class="btn" href="index.html">Study Again</a>
+      <button class="navbtn alt" onclick="restartAll()">Retake Test</button>
+    </div>
+  </section>
+</main>
+<script>
+const qs=[
+  {q:"What does God's will do to evil plans and purposes?", choices:["Breaks and hinders them","Makes them stronger","Forgets them","Hides them"], a:0},
+  {q:"Who does the verse say does not want us to hallow God's name or let His kingdom come?", choices:["The devil, the world, and our sinful nature","Only the world","Only the devil","Only sinful nature"], a:0},
+  {q:"What does God strengthen and keep us firm in?", choices:["His Word and faith","Our own ideas","Money and power","Rules only"], a:0},
+  {q:"How long does the verse say God keeps us firm?", choices:["Until we die","For one year","Only at church","Until summer"], a:0},
+  {q:"How does the verse describe God's will at the end?", choices:["Good and gracious","Harsh and distant","Quiet and hidden","Weak and changing"], a:0}
+];
+let index=0, score=0;
+function shuffle(arr){return arr.map(v=>({v, s:Math.random()})).sort((a,b)=>a.s-b.s).map(x=>x.v)}
+function renderQuestion(){
+  document.getElementById('progressText').textContent=`Question ${index+1} of ${qs.length}`;
+  document.getElementById('scoreText').textContent=`Score: ${score}`;
+  document.getElementById('fill').style.width=`${(index/qs.length)*100}%`;
+  const q=qs[index];
+  document.getElementById('question').textContent=q.q;
+  document.getElementById('feedback').textContent='';
+  const choices=document.getElementById('choices');
+  choices.innerHTML='';
+  const order=shuffle(q.choices.map((text,i)=>({text,i})));
+  order.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='choice';
+    b.textContent=opt.text;
+    b.onclick=()=>answer(opt.i);
+    choices.appendChild(b);
+  });
+}
+function answer(i){
+  const feed=document.getElementById('feedback');
+  if(i===qs[index].a){ score++; feed.textContent='Correct!'; feed.className='feedback good'; }
+  else { feed.textContent='Not quite. Keep going.'; feed.className='feedback bad'; }
+  document.getElementById('scoreText').textContent=`Score: ${score}`;
+  setTimeout(()=>{ index++; if(index<qs.length){ renderQuestion(); } else { startOrder(); } }, 550);
+}
+const correctOrder=[
+  "and when He strengthens",
+  "and keeps us firm",
+  "in His Word and faith",
+  "until we die.",
+  "This is His good and gracious will."
+];
+function startOrder(){
+  document.getElementById('mcPanel').classList.add('hide');
+  document.getElementById('orderPanel').classList.remove('hide');
+  resetOrder();
+}
+function resetOrder(){
+  const bank=document.getElementById('bank');
+  const target=document.getElementById('target');
+  bank.innerHTML=''; target.innerHTML=''; document.getElementById('orderFeedback').textContent='';
+  shuffle([...correctOrder]).forEach(text=>bank.appendChild(makeWord(text)));
+}
+function makeWord(text){
+  const b=document.createElement('button'); b.className='word'; b.textContent=text;
+  b.onclick=()=>{
+    if(b.parentElement.id==='bank') document.getElementById('target').appendChild(b);
+    else document.getElementById('bank').appendChild(b);
+  };
+  return b;
+}
+function checkOrder(){
+  const current=[...document.getElementById('target').children].map(x=>x.textContent);
+  const ok=current.length===correctOrder.length && current.every((x,i)=>x===correctOrder[i]);
+  const el=document.getElementById('orderFeedback');
+  if(ok){ score++; el.textContent='Great job! Order correct.'; el.className='feedback good'; setTimeout(showDone,650); }
+  else { el.textContent='Try again. Read the ending carefully.'; el.className='feedback bad'; }
+}
+function showDone(){
+  document.getElementById('orderPanel').classList.add('hide');
+  document.getElementById('donePanel').classList.remove('hide');
+  document.getElementById('fill').style.width='100%';
+  document.getElementById('finalScore').textContent=`Final score: ${score} points.`;
+}
+function restartAll(){ index=0; score=0; document.getElementById('donePanel').classList.add('hide'); document.getElementById('mcPanel').classList.remove('hide'); renderQuestion(); }
+renderQuestion();
+</script>
+</body>
+</html>
